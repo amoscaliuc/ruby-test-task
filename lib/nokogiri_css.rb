@@ -25,7 +25,7 @@ class NokogiriCss
     browser.goto "https://demo.bank-on-line.ru"
     browser.div(class: 'button-demo').click
     browser.goto "https://demo.bank-on-line.ru/#Contracts"
-    sleep(10)#TODO: another way should be found for the watir html extraction delay
+    sleep(10) #TODO: another way should be found for the watir html extraction delay
 
     page = Nokogiri::HTML.parse(browser.html)
 

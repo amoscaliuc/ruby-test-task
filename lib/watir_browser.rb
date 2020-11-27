@@ -67,5 +67,4 @@ class WatirBrowser
       end
     end
   end
-
 end
