@@ -20,7 +20,7 @@ Contains the _**version #1**_ of the implementation, just on the basis of info g
 
 Contains the _**version #2**_ of the implementation via class and code styles applied
 
-**Book** `Head First O'Reilly`
+**Book** `"Head First" - O'Reilly`
 
 **Docs** `Tutorials from Test Task description`
 
