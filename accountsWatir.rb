@@ -1,20 +1,10 @@
 require "rubygems"
 require "watir"
 require "date"
-
-class AccountEmptyError < StandardError
-end
-
-class BrowserInstanceError < StandardError
-end
-
-class Account
-  attr_accessor :number, :type, :status, :amount, :transactions
-end
-
-class Transaction
-  attr_accessor :amount, :description, :date, :accountNumber
-end
+require_relative "lib/account"
+require_relative "lib/transaction"
+require_relative "lib/exception/account_empty_error"
+require_relative "lib/exception/browser_instance_error"
 
 accounts = Hash.new do |hash, key|
   account = Account.new

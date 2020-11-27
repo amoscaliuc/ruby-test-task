@@ -1,0 +1,2 @@
+class TransactionEmptyError < StandardError
+end

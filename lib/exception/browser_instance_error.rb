@@ -1,0 +1,2 @@
+class BrowserInstanceError < StandardError
+end

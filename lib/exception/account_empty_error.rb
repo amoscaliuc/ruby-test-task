@@ -1,0 +1,2 @@
+class AccountEmptyError < StandardError
+end

@@ -10,7 +10,7 @@
 
 _Decided to make the implementation in 2 separate files for **Watir** and **Nokogiri**._ 
 
-_Though I understand that the task should be done in different steps and these steps to be followed via github commit._
+_Though I understand that the task should be done in different steps and these steps to be followed via github commits._
 
 **Commit**: https://github.com/amoscaliuc/ruby-test-task/commit/9a776a2b3a9912e36be78511181c7617138eec30
 
