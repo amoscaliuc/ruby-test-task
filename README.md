@@ -28,7 +28,5 @@ Contains the _**version #1**_ of the implementation, just on the basis of info g
 
 
 #### TODO:
-* implement unit-testing
-* apply code styles
-
-_**Todo list will be implemented after I receive a feedback, that junior vacancy is still opened. :)**_
+* **implement unit-testing**: _will be implemented in further commits_
+* **~~apply code style and code refactor~~**: _done_
