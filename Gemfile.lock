@@ -1,0 +1,33 @@
+GEM
+  remote: https://rubygems.org/
+  specs:
+    childprocess (3.0.0)
+    ffi (1.13.1-x64-mingw32)
+    mini_portile2 (2.4.0)
+    minitest (5.14.2)
+    nokogiri (1.10.10-x64-mingw32)
+      mini_portile2 (~> 2.4.0)
+    power_assert (1.1.7)
+    regexp_parser (1.8.2)
+    rubyzip (2.3.0)
+    selenium-webdriver (3.142.7)
+      childprocess (>= 0.5, < 4.0)
+      rubyzip (>= 1.2.2)
+    test-unit (3.3.7)
+      power_assert
+    watir (6.17.0)
+      regexp_parser (~> 1.2)
+      selenium-webdriver (~> 3.6)
+
+PLATFORMS
+  x64-mingw32
+
+DEPENDENCIES
+  ffi
+  minitest
+  nokogiri
+  test-unit
+  watir
+
+BUNDLED WITH
+   2.1.4
