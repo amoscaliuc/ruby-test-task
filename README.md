@@ -12,10 +12,13 @@ _Decided to make the implementation in 2 separate files for **Watir** and **Noko
 
 _Though I understand that the task should be done in different steps and these steps to be followed via github commits._
 
-**Commit**: https://github.com/amoscaliuc/ruby-test-task/commit/9a776a2b3a9912e36be78511181c7617138eec30
+**Commit**: `https://github.com/amoscaliuc/ruby-test-task/commit/9a776a2b3a9912e36be78511181c7617138eec30`
 
 Contains the _**version #1**_ of the implementation, just on the basis of info gained from tutorials about Ruby
 
+**Commit**: `https://github.com/amoscaliuc/ruby-test-task/commit/2b0da86532af1305fcd6c527505f122d7ff0588c`
+
+Contains the _**version #2**_ of the implementation via class and code styles applied
 
 **Book** `Head First O'Reilly`
 
@@ -28,5 +31,5 @@ Contains the _**version #1**_ of the implementation, just on the basis of info g
 
 
 #### TODO:
-* **implement unit-testing**: _will be implemented in further commits_
+* **implement unit-testing of main methods**: _will be implemented in further commits_
 * **~~apply code style and code refactor~~**: _done_
