@@ -47,4 +47,6 @@
 ```
 
 #### FYI
-> Skip `samples` folder, i.e. just for personal practicing non functionaly related to test task!
+1. **_Run `bundle install` in the root of the project to extract all needed gems for the script, some may not be included by default_**
+
+> Skip `samples` folder, i.e. just for personal practicing non functionally related to test task!
