@@ -45,7 +45,7 @@
 
 > Skip `samples` folder, i.e. just for personal practicing non functionally related to test task!
 
-**Documentations:**
+**Documentation:**
 
 `"Head First" - O'Reilly`
  
