@@ -1,43 +1,35 @@
 require "rubygems"
-require "watir"
-require "date"
-require_relative "account"
-require_relative "transaction"
+require_relative "base"
+require_relative "exception/account_empty_error"
+require_relative "exception/transaction_empty_error"
 
-class WatirBrowser
-  def accounts
-    accounts = Hash.new do |hash, key|
-      account = Account.new
-      account.transactions = {}
-      hash[key] = account
-    end
+class WatirBrowser < Base
+  def bank_accounts
+    accounts = default_accounts
+    transactions = default_transactions
+    browser = watir_browser_init
 
-    transactions = Hash.new do |hash, key|
-      transaction = Transaction.new
-      hash[key] = transaction
-    end
-
-    browser = Watir::Browser.new :chrome
-    browser.goto "https://demo.bank-on-line.ru"
-    browser.div(class: 'button-demo').click
-    browser.goto "https://demo.bank-on-line.ru/#Contracts"
-
-    row_counter = 0
-    browser.table(id: 'contracts-list').rows(class: 'cp-item').each do |row|
-      row_array = Array.new
-      row.cells.each do |cell|
-        if cell.text != ""
-          row_array << cell.text
+    begin
+      browser.table(id: 'contracts-list').rows(class: 'cp-item').each do |row|
+        account = Array.new
+        row.cells.each do |cell|
+          if cell.text != ""
+            account << cell.text
+          end
         end
+
+        if account == []
+          raise AccountEmptyError, "No accounts detected!"
+        end
+
+        account_number = account[0]
+        accounts[account_number].number = account_number
+        accounts[account_number].type = account[1]
+        accounts[account_number].status = account[2]
+        accounts[account_number].amount = account[3]
       end
-
-      account_number = row_array[0]
-      accounts[account_number].number = account_number
-      accounts[account_number].type = row_array[1]
-      accounts[account_number].status = row_array[2]
-      accounts[account_number].amount = row_array[3]
-
-      row_counter += 1
+    rescue AccountEmptyError => error
+      puts "Error: #{error.message}"
     end
 
     accounts.each do |account|
@@ -45,25 +37,32 @@ class WatirBrowser
       browser.goto "https://demo.bank-on-line.ru/#Contracts/#{account_number}/Transactions"
       browser.span(id: 'getTranz').click
       count = 0
-      browser.table(class: 'cp-tran-with-balance').rows(class: 'cp-transaction').each do |row|
-        row_array = Array.new
-        row.cells.each do |cell|
-          if cell.text != ""
-            row_array << cell.text
+
+      begin
+        browser.table(class: 'cp-tran-with-balance').rows(class: 'cp-transaction').each do |row|
+          transaction = Array.new
+          row.cells.each do |cell|
+            if cell.text != ""
+              transaction << cell.text
+            end
+          end
+
+          if transaction == []
+            raise TransactionEmptyError, "No transactions detected!"
+          end
+
+          transaction_date = transaction[3]
+          if date_two_months_old(transaction_date)
+            transactions[count].date = transaction_date
+            transactions[count].amount = transaction[4]
+            transactions[count].description = transaction[2]
+            transactions[count].accountNumber = account_number
+            accounts[account_number].transactions = transactions
+            count += 1
           end
         end
-
-        transaction_date = row_array[3]
-        date_range = Date.parse transaction_date
-        if (date_range.month) >= Date.today.month - 2
-          transactions[count].date = transaction_date
-          transactions[count].amount = row_array[4]
-          transactions[count].description = row_array[2]
-          transactions[count].accountNumber = account_number
-
-          accounts[account_number].transactions = transactions
-          count += 1
-        end
+      rescue TransactionEmptyError => error
+        puts "Error: #{error.message}"
       end
     end
   end

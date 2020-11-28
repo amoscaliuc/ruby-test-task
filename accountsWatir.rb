@@ -1,7 +1,7 @@
 require_relative "lib/watir_browser"
-require_relative "lib/exception/account_empty_error"
 
+# Watir implementation
 watir = WatirBrowser.new
-accounts = watir.accounts
+accounts = watir.bank_accounts
 
 p accounts
