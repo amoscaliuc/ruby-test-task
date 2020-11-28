@@ -25,16 +25,6 @@
 **Commit**: `https://github.com/amoscaliuc/ruby-test-task/commit/2b0da86532af1305fcd6c527505f122d7ff0588c`
 > Contains the _**version #2**_ of the implementation via class and code styles applied
 
-**Book** `"Head First" - O'Reilly`
-
-**Docs** `Tutorials from Test Task description`
-
-
-#### Difficulties:
-* problems with ffi extension, did not notice it should be installed as a separate gem module
-* had problems to connect the implementation of data extraction via **watir** and **nokogiri** parsing
-
-
 #### TODO:
 * **implement unit-testing of main methods**: _will be implemented in further commits_
 * **~~apply code style and code refactor~~**: _DONE_
@@ -54,3 +44,13 @@
 3. **_For Nokogiri implementation run `accountsNokogiri.rb`_**
 
 > Skip `samples` folder, i.e. just for personal practicing non functionally related to test task!
+
+**Documentations:**
+
+`"Head First" - O'Reilly`
+ 
+`Tutorials from Test Task description`
+ 
+ #### Difficulties:
+ * _problems with ffi extension, did not notice it should be installed as a separate gem module_
+ * _had problems to connect the implementation of data extraction via **watir** and **nokogiri** parsing_
