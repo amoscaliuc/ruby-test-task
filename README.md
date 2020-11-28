@@ -39,8 +39,12 @@
 * **implement unit-testing of main methods**: _will be implemented in further commits_
 * **~~apply code style and code refactor~~**: _DONE_
 * **format script output to proper JSON format**: -
-* ```ruby 
+* **Fix the block code above**: 
+```ruby 
     browser.goto "https://demo.bank-on-line.ru/#Contracts/#{account_number}/Transactions"
     browser.span(id: 'getTranz').click
     sleep(5) #TODO find another way for the watir html extraction delay
 ```
+
+#### FYI
+> Skip `samples` folder, i.e. just for personal practicing non functionaly related to test task!
