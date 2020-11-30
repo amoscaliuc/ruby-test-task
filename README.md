@@ -35,7 +35,7 @@
 ## TODO:
  * **implement unit-testing of main methods**: _will be implemented in further commits_
  * **~~apply code style and code refactor~~**: _DONE_
- * **format script output to proper JSON format**: -
+ * **~~format script output to proper JSON format~~**: _DONE_
  * **Fix the block code above**: 
  ```ruby 
      browser.goto "https://demo.bank-on-line.ru/#Contracts/#{account_number}/Transactions"

@@ -40,8 +40,8 @@ class NokogiriCss < Base
 
     begin
       accounts.each do |account|
-        account_number = account[0]
-        browser.goto "https://demo.bank-on-line.ru/#Contracts/#{account_number}/Transactions"
+        transaction_account_number = account[0]
+        browser.goto "https://demo.bank-on-line.ru/#Contracts/#{transaction_account_number}/Transactions"
         browser.span(id: 'getTranz').click
         sleep(5) #TODO: find another way for the watir html extraction delay
         page = Nokogiri::HTML.parse(browser.html)
@@ -62,9 +62,9 @@ class NokogiriCss < Base
             transactions[count].date = transaction_date
             transactions[count].amount = transaction[4]
             transactions[count].description = transaction[2]
-            transactions[count].accountNumber = account_number
+            transactions[count].accountNumber = transaction_account_number
 
-            accounts[account_number].transactions = transactions
+            accounts[transaction_account_number].transactions = transactions
             count += 1
           end
         end

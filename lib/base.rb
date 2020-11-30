@@ -7,6 +7,10 @@ class Base
   def default_accounts
     Hash.new do |hash, key|
       account = Account.new
+      account.number = ''
+      account.type = ''
+      account.status = ''
+      account.amount = ''
       account.transactions = {}
       hash[key] = account
     end

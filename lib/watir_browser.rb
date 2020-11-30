@@ -31,10 +31,9 @@ class WatirBrowser < Base
     rescue AccountEmptyError => error
       puts "Error: #{error.message}"
     end
-
     accounts.each do |account|
-      account_number = account[0]
-      browser.goto "https://demo.bank-on-line.ru/#Contracts/#{account_number}/Transactions"
+      transaction_account_number = account[0]
+      browser.goto "https://demo.bank-on-line.ru/#Contracts/#{transaction_account_number}/Transactions"
       browser.span(id: 'getTranz').click
       count = 0
 
@@ -56,8 +55,9 @@ class WatirBrowser < Base
             transactions[count].date = transaction_date
             transactions[count].amount = transaction[4]
             transactions[count].description = transaction[2]
-            transactions[count].accountNumber = account_number
-            accounts[account_number].transactions = transactions
+            transactions[count].accountNumber = transaction_account_number
+
+            accounts[transaction_account_number].transactions = transactions
             count += 1
           end
         end
