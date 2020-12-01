@@ -4,7 +4,6 @@ require 'rubygems'
 require 'watir'
 require 'nokogiri'
 require 'date'
-require 'json'
 require_relative 'base'
 require_relative 'exception/account_empty_error'
 require_relative 'exception/transaction_empty_error'
@@ -94,7 +93,7 @@ class Bank < Base
   end
 
   def output
-    File.open("output.json","w") do |file|
+    File.open('output.json', 'w') do |file|
       fetch_transactions.each do |transaction|
         PP.pp(transaction[1], file)
       end
