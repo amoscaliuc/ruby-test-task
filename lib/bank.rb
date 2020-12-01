@@ -54,19 +54,19 @@ class Bank < Base
     accounts = fetch_accounts
     browser = connect
     accounts.each do |account|
-      account_name = account[0]
-      browser.goto "https://demo.bank-on-line.ru/#Contracts/#{account_name}/Transactions"
+      account_name = account[1].name
+      browser.goto "https://demo.bank-on-line.ru/#Contracts/#{account[1].name}/Transactions"
       # input = Nokogiri::HTML.fragment(browser.input(id: "DateTo").html)
       # input.at('input')['value'] = Date.today.prev_month(2)
-      browser.span(id: 'getTranz').click # TODO: set date to 2 months before click
+      browser.span(id: 'getTranz').click # TODO: set dateFrom to 2 months later before click
       html = Nokogiri::HTML.fragment(browser.table(class: 'cp-tran-with-balance').html)
-      accounts[account_name].transactions = parse_transactions(html, account_name)
+      accounts[account_name].transactions = parse_transactions(html, account)
     end
 
     accounts
   end
 
-  def parse_transactions(html, account_name)
+  def parse_transactions(html, account)
     transactions = default_transactions
     begin
       table_rows = html.css('tr.cp-transaction')
@@ -82,8 +82,8 @@ class Bank < Base
         transactions[count].date = transaction[3]
         transactions[count].description = transaction[2]
         transactions[count].amount = get_balance(transaction[4])
-        transactions[count].currency = get_currency(transaction[5])
-        transactions[count].account_name = account_name
+        transactions[count].currency = account[1].currency
+        transactions[count].account_name = account[1].name
         count += 1
       end
 
@@ -94,12 +94,10 @@ class Bank < Base
   end
 
   def output
-    puts fetch_transactions
-
-=begin
-    File.open('output.json', 'w') do |file|
-      file.write(fetch_transactions)
+    File.open("output.json","w") do |file|
+      fetch_transactions.each do |transaction|
+        PP.pp(transaction[1], file)
+      end
     end
-=end
   end
 end
