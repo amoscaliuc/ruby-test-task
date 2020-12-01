@@ -10,10 +10,10 @@ class Base
   def default_accounts
     Hash.new do |hash, key|
       account = Account.new
-      account.number = ''
-      account.type = ''
-      account.status = ''
-      account.amount = ''
+      account.name = ''
+      account.currency = ''
+      account.balance = 0.00
+      account.nature = ''
       account.transactions = {}
       hash[key] = account
     end
@@ -26,16 +26,14 @@ class Base
     end
   end
 
-  def watir_browser_init
-    browser = Watir::Browser.new
-    browser.goto 'https://demo.bank-on-line.ru'
-    browser.div(class: 'button-demo').click
-    browser.goto 'https://demo.bank-on-line.ru/#Contracts'
-    browser
+  def get_currency(string)
+    result = string.split(' ')
+    result[1] || '-'
   end
 
-  def date_two_months_old(date)
-    date_range = Date.parse date
-    (date_range.month) >= Date.today.month - 2
+  def get_balance(string)
+    format '%.2f', string.delete(' ').to_f
+  rescue ArgumentError
+    nil
   end
 end

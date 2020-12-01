@@ -1,5 +1,5 @@
 # frozen_string_literal: true
 
 class Transaction
-  attr_accessor :amount, :description, :date, :account_number
+  attr_accessor :date, :description, :amount, :currency, :account_name
 end
