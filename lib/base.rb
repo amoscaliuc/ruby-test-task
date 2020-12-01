@@ -1,10 +1,12 @@
-require "watir"
-require_relative "account"
-require_relative "transaction"
-require "date"
+# frozen_string_literal: true
 
+require 'watir'
+require_relative 'account'
+require_relative 'transaction'
+require 'date'
+
+# Base class with common methods
 class Base
-
   def default_accounts
     Hash.new do |hash, key|
       account = Account.new
@@ -26,9 +28,9 @@ class Base
 
   def watir_browser_init
     browser = Watir::Browser.new
-    browser.goto "https://demo.bank-on-line.ru"
+    browser.goto 'https://demo.bank-on-line.ru'
     browser.div(class: 'button-demo').click
-    browser.goto "https://demo.bank-on-line.ru/#Contracts"
+    browser.goto 'https://demo.bank-on-line.ru/#Contracts'
     browser
   end
 
