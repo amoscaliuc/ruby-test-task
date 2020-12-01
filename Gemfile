@@ -9,3 +9,4 @@ gem "minitest"
 gem "test-unit"
 gem "nokogiri"
 gem "ffi"
+gem "rubocop", require: false

@@ -4,6 +4,7 @@ require_relative "transaction"
 require "date"
 
 class Base
+
   def default_accounts
     Hash.new do |hash, key|
       account = Account.new
