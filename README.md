@@ -17,7 +17,7 @@
 
 2. **_run `accounts.rb`_**
 
-> Skip `samples` folder, i.e. just for personal practicing non functionally related to test task!
+3. **_output will be written into `output.json` _in the root of the project_ _**
 
 ## TODO:
  * **implement unit-testing of main methods**: _will be implemented in further commits_

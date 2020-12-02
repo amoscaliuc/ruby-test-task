@@ -39,7 +39,7 @@ class Bank < Base
         account_number = account[0]
         accounts[account_number].name = account_number
         accounts[account_number].currency = get_currency(account[1])
-        accounts[account_number].balance = get_balance(account[3])
+        accounts[account_number].balance = get_balance(account[3]).to_f
         accounts[account_number].nature = account[2]
       end
     rescue AccountEmptyError => e
@@ -54,10 +54,10 @@ class Bank < Base
     browser = connect
     accounts.each do |account|
       account_name = account[1].name
-      browser.goto "https://demo.bank-on-line.ru/#Contracts/#{account[1].name}/Transactions"
+      browser.goto "https://demo.bank-on-line.ru/#Contracts/#{account_name}/Transactions"
       # input = Nokogiri::HTML.fragment(browser.input(id: "DateTo").html)
       # input.at('input')['value'] = Date.today.prev_month(2)
-      browser.span(id: 'getTranz').click # TODO: set dateFrom to 2 months later before click
+      browser.span(id: 'getTranz').click # TODO: set dateFrom to 2 months before click
       html = Nokogiri::HTML.fragment(browser.table(class: 'cp-tran-with-balance').html)
       accounts[account_name].transactions = parse_transactions(html, account)
     end
@@ -80,7 +80,7 @@ class Bank < Base
       text_all_rows.each do |transaction|
         transactions[count].date = transaction[3]
         transactions[count].description = transaction[2]
-        transactions[count].amount = get_balance(transaction[4])
+        transactions[count].amount = get_balance(transaction[4]).to_f
         transactions[count].currency = account[1].currency
         transactions[count].account_name = account[1].name
         count += 1
