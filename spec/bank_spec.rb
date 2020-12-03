@@ -25,13 +25,11 @@ RSpec.describe Bank do
       expect(accounts.first[1].balance).to eq(1_000_000.0)
     end
 
-=begin
-    it "catch exception" do
-      accounts = bank_entity.parse_accounts('')
-
-      expect{ accounts }.to raise_error(HtmlEmptyError)
-    end
-=end
+    #     it "catch exception" do
+    #       accounts = bank_entity.parse_accounts('')
+    #
+    #       expect{ accounts }.to raise_error(HtmlEmptyError)
+    #     end
   end
 
   context 'account transactions' do
@@ -51,5 +49,15 @@ RSpec.describe Bank do
       expect(transactions.first[1].currency).to eq('RUB')
       expect(transactions.first[1].amount).to eq(50.0)
     end
+
+    #      it "catch exception" do
+    #        account = Account.new
+    #        account.name = '40817810200000055320'
+    #        account.currency = 'RUB'
+    #        mock_account = { '40817810200000055320' => account }
+    #        transactions = bank_entity.parse_transactions('', mock_account.to_a[0])
+    #
+    #        expect{ transactions }.to raise_error(HtmlEmptyError)
+    #      end
   end
 end
