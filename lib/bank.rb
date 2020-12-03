@@ -44,10 +44,6 @@ class Bank < Base
     end
 
     accounts
-  rescue AccountEmptyError => e
-    puts "Error: #{e.message}"
-  rescue HtmlEmptyError => e
-    puts "Error: #{e.message}"
   end
 
   def fetch_transactions(browser)
@@ -89,10 +85,6 @@ class Bank < Base
     end
 
     transactions
-  rescue TransactionEmptyError => e
-    puts "Error: #{e.message}"
-  rescue HtmlEmptyError => e
-    puts "Error: #{e.message}"
   end
 
   def output
