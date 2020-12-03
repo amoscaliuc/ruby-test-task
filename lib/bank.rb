@@ -15,12 +15,28 @@ class Bank < Base
     Watir::Browser.new
   end
 
-  def fetch_accounts(browser)
+  def get_html_accounts(browser)
     browser.goto 'https://demo.bank-on-line.ru'
     browser.div(class: 'button-demo').click
     browser.goto 'https://demo.bank-on-line.ru/#Contracts'
     html = Nokogiri::HTML.fragment(browser.table(id: 'contracts-list').html)
     parse_accounts(html)
+  end
+
+  def fetch_accounts(browser)
+    accounts = get_html_accounts(browser)
+    accounts.each do |account|
+      account_name = account[1].name
+      browser.goto "https://demo.bank-on-line.ru/#Contracts/#{account_name}/Transactions"
+      browser.text_field(id: 'DateFrom').click
+      browser.span(class: 'ui-icon-circle-triangle-w').click
+      browser.a(class: 'ui-state-default', text: Date.today.strftime('%d').sub!(/^0/, '')).click
+      browser.span(id: 'getTranz').click
+      html = Nokogiri::HTML.fragment(browser.table(class: 'cp-tran-with-balance').html)
+      accounts[account_name].transactions = parse_transactions(html, account)
+    end
+
+    accounts
   end
 
   def parse_accounts(html)
@@ -41,22 +57,6 @@ class Bank < Base
       accounts[account_number].currency = get_currency(account[1])
       accounts[account_number].balance = get_balance(account[3]).to_f
       accounts[account_number].nature = account[2]
-    end
-
-    accounts
-  end
-
-  def fetch_transactions(browser)
-    accounts = fetch_accounts(browser)
-    accounts.each do |account|
-      account_name = account[1].name
-      browser.goto "https://demo.bank-on-line.ru/#Contracts/#{account_name}/Transactions"
-      browser.text_field(id: 'DateFrom').click
-      browser.span(class: 'ui-icon-circle-triangle-w').click
-      browser.a(class: 'ui-state-default', text: Date.today.strftime('%d').sub!(/^0/, '')).click
-      browser.span(id: 'getTranz').click
-      html = Nokogiri::HTML.fragment(browser.table(class: 'cp-tran-with-balance').html)
-      accounts[account_name].transactions = parse_transactions(html, account)
     end
 
     accounts
@@ -87,13 +87,13 @@ class Bank < Base
     transactions
   end
 
-  def output
+  def accounts_into_file
     accounts = {}
     transactions = {}
     output = {}
     count = 0
     File.open('output.json', 'w') do |file|
-      fetch_transactions(browser).each do |account|
+      fetch_accounts(browser).each do |account|
         accounts['name'] = account[1].name
         accounts['currency'] = account[1].currency
         accounts['balance'] = account[1].balance
