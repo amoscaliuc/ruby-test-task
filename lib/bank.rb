@@ -97,11 +97,11 @@ class Bank < Base
         accounts['balance'] = account[1].balance
         accounts['nature'] = account[1].nature
         account[1].transactions.each do |transaction|
-          transactions['account_name'] = transaction[1].account_name
           transactions['date'] = transaction[1].date
           transactions['description'] = transaction[1].description
           transactions['amount'] = transaction[1].amount
           transactions['currency'] = transaction[1].currency
+          transactions['account_name'] = transaction[1].account_name
         end
         accounts['transactions'] = transactions
 
