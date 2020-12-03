@@ -7,6 +7,7 @@ require 'date'
 require_relative 'base'
 require_relative 'exception/account_empty_error'
 require_relative 'exception/transaction_empty_error'
+require_relative 'exception/html_empty_error'
 
 # Nokogiri implementation
 class Bank < Base
@@ -23,8 +24,9 @@ class Bank < Base
   end
 
   def parse_accounts(html)
-    accounts = default_accounts
     begin
+      raise HtmlEmptyError, 'Empty html!' if html == ''
+
       table_rows = html.css('tr.cp-item')
       text_all_rows = table_rows.map do |row|
         row_values = row.css("td[data-action='show-contract-info']").map(&:text)
@@ -33,6 +35,7 @@ class Bank < Base
 
       raise AccountEmptyError, 'No accounts detected!' if text_all_rows == []
 
+      accounts = default_accounts
       text_all_rows.each do |account|
         account_number = account[0]
         accounts[account_number].name = account_number
@@ -40,11 +43,13 @@ class Bank < Base
         accounts[account_number].balance = get_balance(account[3]).to_f
         accounts[account_number].nature = account[2]
       end
+
+      accounts
     rescue AccountEmptyError => e
       puts "Error: #{e.message}"
+    rescue HtmlEmptyError => e
+      puts "Error: #{e.message}"
     end
-
-    accounts
   end
 
   def fetch_transactions(browser)
@@ -64,8 +69,9 @@ class Bank < Base
   end
 
   def parse_transactions(html, account)
-    transactions = default_transactions
     begin
+      raise HtmlEmptyError, 'Empty html!' if html == ''
+
       table_rows = html.css('tr.cp-transaction')
       text_all_rows = table_rows.map do |row|
         row_values = row.css("td[data-action='transaction-show-details']").map(&:text)
@@ -75,6 +81,7 @@ class Bank < Base
       raise TransactionEmptyError, 'No transactions detected!' if text_all_rows == []
 
       count = 0
+      transactions = default_transactions
       text_all_rows.each do |transaction|
         transactions[count].date = transaction[3]
         transactions[count].description = transaction[2]
@@ -86,6 +93,8 @@ class Bank < Base
 
       transactions
     rescue TransactionEmptyError => e
+      puts "Error: #{e.message}"
+    rescue HtmlEmptyError => e
       puts "Error: #{e.message}"
     end
   end

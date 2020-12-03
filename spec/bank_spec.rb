@@ -3,6 +3,7 @@
 require '../lib/bank'
 require '../lib/account'
 require '../lib/transaction'
+require_relative '../lib/exception/html_empty_error'
 require 'nokogiri'
 
 # Test Bank Class
@@ -24,11 +25,13 @@ RSpec.describe Bank do
       expect(accounts.first[1].balance).to eq(1_000_000.0)
     end
 
-    it 'exception error' do
-      text_all_rows = []
+=begin
+    it "catch exception" do
+      accounts = bank_entity.parse_accounts('')
 
-      raise unless text_all_rows == []
+      expect{ accounts }.to raise_error(HtmlEmptyError)
     end
+=end
   end
 
   context 'account transactions' do
@@ -47,12 +50,6 @@ RSpec.describe Bank do
       expect(transactions.first[1].date).to eq('01.12.2020')
       expect(transactions.first[1].currency).to eq('RUB')
       expect(transactions.first[1].amount).to eq(50.0)
-    end
-
-    it 'exception error' do
-      text_all_rows = []
-
-      raise unless text_all_rows == []
     end
   end
 end
