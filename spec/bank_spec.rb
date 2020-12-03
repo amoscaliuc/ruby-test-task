@@ -25,15 +25,13 @@ RSpec.describe Bank do
       expect(accounts.first[1].balance).to eq(1_000_000.0)
     end
 
-=begin
-    it "raise error" do
-      accounts = bank_entity.parse_accounts('')
-
-      expect { accounts }.to raise_error { |error|
-        expect(error).to be_a(HtmlEmptyError)
-      }
-    end
-=end
+    #     it "raise error" do
+    #       accounts = bank_entity.parse_accounts('')
+    #
+    #       expect { accounts }.to raise_error { |error|
+    #         expect(error).to be_a(HtmlEmptyError)
+    #       }
+    #     end
   end
 
   context 'account transactions' do
@@ -54,18 +52,16 @@ RSpec.describe Bank do
       expect(transactions.first[1].amount).to eq(50.0)
     end
 
-=begin
-    it "raise error" do
-      account = Account.new
-      account.name = '40817810200000055320'
-      account.currency = 'RUB'
-      mock_account = { '40817810200000055320' => account }
-      transactions = bank_entity.parse_transactions('', mock_account.to_a[0])
-
-      expect { transactions }.to raise_error { |error|
-        expect(error).to be_a(HtmlEmptyError)
-      }
-    end
-=end
+    #     it "raise error" do
+    #       account = Account.new
+    #       account.name = '40817810200000055320'
+    #       account.currency = 'RUB'
+    #       mock_account = { '40817810200000055320' => account }
+    #       transactions = bank_entity.parse_transactions('', mock_account.to_a[0])
+    #
+    #       expect { transactions }.to raise_error { |error|
+    #         expect(error).to be_a(HtmlEmptyError)
+    #       }
+    #     end
   end
 end

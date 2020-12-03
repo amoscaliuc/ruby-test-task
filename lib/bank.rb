@@ -88,9 +88,24 @@ class Bank < Base
   end
 
   def output
+    accounts = {}
+    transactions = {}
     File.open('output.json', 'w') do |file|
-      fetch_transactions(browser).each do |transaction|
-        PP.pp(transaction[1], file)
+      fetch_transactions(browser).each do |account|
+        accounts['name'] = account[1].name
+        accounts['currency'] = account[1].currency
+        accounts['balance'] = account[1].balance
+        accounts['nature'] = account[1].nature
+        account[1].transactions.each do |transaction|
+          transactions['account_name'] = transaction[1].account_name
+          transactions['date'] = transaction[1].date
+          transactions['description'] = transaction[1].description
+          transactions['amount'] = transaction[1].amount
+          transactions['currency'] = transaction[1].currency
+        end
+        accounts['transactions'] = transactions
+
+        PP.pp(accounts, file)
       end
     end
   end
