@@ -17,7 +17,9 @@
 
 2. **_run `accounts.rb`_**
 
-3. **_output will be written into `output.json` _in the root of the project_ _**
+3. **_output will be written into `output.json` in the root of the project_**
+
+4. **_run `rspec` in the root of the project for tests_**
 
 ## TODO:
  * **~~implement unit-testing of main methods~~**:  _DONE_
