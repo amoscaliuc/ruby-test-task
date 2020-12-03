@@ -55,9 +55,10 @@ class Bank < Base
     accounts.each do |account|
       account_name = account[1].name
       browser.goto "https://demo.bank-on-line.ru/#Contracts/#{account_name}/Transactions"
-      # input = Nokogiri::HTML.fragment(browser.input(id: "DateTo").html)
-      # input.at('input')['value'] = Date.today.prev_month(2)
-      browser.span(id: 'getTranz').click # TODO: set dateFrom to 2 months before click
+      browser.text_field(id: 'DateFrom').click
+      browser.span(class: 'ui-icon-circle-triangle-w').click
+      browser.a(class: 'ui-state-default', text: Date.today.strftime('%d').sub!(/^0/, '')).click
+      browser.span(id: 'getTranz').click
       html = Nokogiri::HTML.fragment(browser.table(class: 'cp-tran-with-balance').html)
       accounts[account_name].transactions = parse_transactions(html, account)
     end
