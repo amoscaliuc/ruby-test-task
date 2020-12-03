@@ -10,15 +10,13 @@ require_relative 'exception/transaction_empty_error'
 
 # Nokogiri implementation
 class Bank < Base
-  def connect
-    browser = Watir::Browser.new
-    browser.goto 'https://demo.bank-on-line.ru'
-    browser.div(class: 'button-demo').click
-    browser
+  def browser
+    Watir::Browser.new
   end
 
-  def fetch_accounts
-    browser = connect
+  def fetch_accounts(browser)
+    browser.goto 'https://demo.bank-on-line.ru'
+    browser.div(class: 'button-demo').click
     browser.goto 'https://demo.bank-on-line.ru/#Contracts'
     html = Nokogiri::HTML.fragment(browser.table(id: 'contracts-list').html)
     parse_accounts(html)
@@ -49,9 +47,8 @@ class Bank < Base
     accounts
   end
 
-  def fetch_transactions
-    accounts = fetch_accounts
-    browser = connect
+  def fetch_transactions(browser)
+    accounts = fetch_accounts(browser)
     accounts.each do |account|
       account_name = account[1].name
       browser.goto "https://demo.bank-on-line.ru/#Contracts/#{account_name}/Transactions"
@@ -95,7 +92,7 @@ class Bank < Base
 
   def output
     File.open('output.json', 'w') do |file|
-      fetch_transactions.each do |transaction|
+      fetch_transactions(browser).each do |transaction|
         PP.pp(transaction[1], file)
       end
     end
