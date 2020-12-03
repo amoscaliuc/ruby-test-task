@@ -90,6 +90,8 @@ class Bank < Base
   def output
     accounts = {}
     transactions = {}
+    output = {}
+    count = 0
     File.open('output.json', 'w') do |file|
       fetch_transactions(browser).each do |account|
         accounts['name'] = account[1].name
@@ -104,9 +106,11 @@ class Bank < Base
           transactions['account_name'] = transaction[1].account_name
         end
         accounts['transactions'] = transactions
-
-        PP.pp(accounts, file)
+        output[count] = accounts
+        count += 1
       end
+
+      PP.pp({'accounts' => output}, file)
     end
   end
 end
