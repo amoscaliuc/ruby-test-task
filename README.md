@@ -20,7 +20,7 @@
 3. **_output will be written into `output.json` _in the root of the project_ _**
 
 ## TODO:
- * **implement unit-testing of main methods**: _will be implemented in further commits_
+ * **~~implement unit-testing of main methods~~**:  _DONE_
  * **~~apply code style and code refactor~~**: _DONE_
  * **~~format script output to proper JSON format~~**: _DONE_
  * **~~Fix the block code above~~**: _DONE_
