@@ -4,6 +4,7 @@ require '../lib/base'
 require '../lib/account'
 require '../lib/transaction'
 
+# Test Base Class
 RSpec.describe Base do
   def base_entity
     Base.new
