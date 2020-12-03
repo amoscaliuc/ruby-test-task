@@ -5,5 +5,5 @@ require 'pp'
 
 # Bank data
 bank = Bank.new
-# pp bank.fetch_accounts(bank.browser)
+# pp bank.fetch_accounts
 bank.accounts_into_file

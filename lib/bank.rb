@@ -11,20 +11,13 @@ require_relative 'exception/html_empty_error'
 
 # Nokogiri implementation
 class Bank < Base
-  def browser
-    Watir::Browser.new
-  end
-
-  def get_html_accounts(browser)
+  def fetch_accounts
+    browser = Watir::Browser.new
     browser.goto 'https://demo.bank-on-line.ru'
     browser.div(class: 'button-demo').click
     browser.goto 'https://demo.bank-on-line.ru/#Contracts'
     html = Nokogiri::HTML.fragment(browser.table(id: 'contracts-list').html)
-    parse_accounts(html)
-  end
-
-  def fetch_accounts(browser)
-    accounts = get_html_accounts(browser)
+    accounts = parse_accounts(html)
     accounts.each do |account|
       account_name = account[1].name
       browser.goto "https://demo.bank-on-line.ru/#Contracts/#{account_name}/Transactions"
@@ -93,7 +86,7 @@ class Bank < Base
     output = {}
     count = 0
     File.open('output.json', 'w') do |file|
-      fetch_accounts(browser).each do |account|
+      fetch_accounts.each do |account|
         accounts['name'] = account[1].name
         accounts['currency'] = account[1].currency
         accounts['balance'] = account[1].balance
@@ -110,7 +103,7 @@ class Bank < Base
         count += 1
       end
 
-      PP.pp({'accounts' => output}, file)
+      PP.pp({ 'accounts' => output }, file)
     end
   end
 end
