@@ -10,7 +10,6 @@
 **Watir** `6.17.0`
 
 **Nokogiri** `1.10.10`
-##
 
 ## FYI
 1. **_Run `bundle install` in the root of the project to extract all needed gems for the script, some may not be included by default_**
