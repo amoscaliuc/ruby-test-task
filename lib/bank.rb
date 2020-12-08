@@ -35,7 +35,7 @@ class Bank < Base
 
     raise AccountEmptyError, 'No accounts detected!' if text_all_rows == []
 
-    accounts = {}
+    accounts = []
     text_all_rows.each_with_index do |account, index|
       new_account = Account.new(
         name: account[0],
@@ -72,7 +72,7 @@ class Bank < Base
 
     raise TransactionEmptyError, 'No transactions detected!' if text_all_rows == []
 
-    transactions = {}
+    transactions = []
     text_all_rows.each_with_index do |transaction, index|
       new_transaction = Transaction.new(
         date: transaction[3],
@@ -89,10 +89,11 @@ class Bank < Base
 
   def accounts_into_file
     File.open('output.json', 'w') do |file|
-      fetch_accounts.each do |account|
-        account[1]['transactions'] = fetch_transactions(account[1]['name'])
-        PP.pp(account, file)
+      accounts = fetch_accounts.each do |account|
+        account['transactions'] = fetch_transactions(account['name'])
       end
+
+      file.write(JSON.pretty_generate({ 'accounts' => accounts }))
     end
   end
 end

@@ -19,11 +19,11 @@ RSpec.describe Bank do
       accounts = bank_entity.parse_accounts(html)
 
       expect(accounts.count).to eq(3)
-      expect(accounts.first[1]).to eq(
+      expect(accounts.first).to eq(
         {
           'name' => '40817810200000055320',
           'currency' => 'RUB',
-          'balance' => 1_000_000.0,
+          'balance' => 1000000.0,
           'nature' => 'Активный',
           'transactions' => {}
         }
@@ -46,7 +46,7 @@ RSpec.describe Bank do
       transactions = bank_entity.parse_transactions(html, '40817810200000055320')
 
       expect(transactions.count).to eq(5)
-      expect(transactions.first[1]).to eq(
+      expect(transactions.first).to eq(
         {
           'date' => '01.12.2020',
           'amount' => 50.0,
