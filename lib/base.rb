@@ -8,8 +8,7 @@ require 'date'
 # Base class with common methods
 class Base
   def get_currency(string)
-    result = string.split(' ')
-    result[1] || '-'
+    string.strip.split.last
   end
 
   def get_balance(string)
@@ -20,7 +19,7 @@ class Base
 
   def to_hash(object)
     hash = {}
-    object.instance_variables.each {|var| hash[var.to_s.delete("@")] = object.instance_variable_get(var) }
+    object.instance_variables.each { |var| hash[var.to_s.delete('@')] = object.instance_variable_get(var) }
     hash
   end
 end

@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+# Account class
 class Account
   attr_accessor :name, :currency, :balance, :nature, :transactions
 

@@ -11,7 +11,6 @@ require_relative 'exception/html_empty_error'
 
 # Nokogiri implementation
 class Bank < Base
-
   def connect
     Watir::Browser.new
   end
@@ -82,7 +81,7 @@ class Bank < Base
         date: transaction[3],
         description: transaction[2],
         amount: get_balance(transaction[4]).to_f,
-        currency: 'USD',
+        currency: transaction[5][-1, 1],
         account_name: account_name
       )
       transactions[count] = to_hash(new_transaction)
