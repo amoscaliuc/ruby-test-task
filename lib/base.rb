@@ -17,6 +17,11 @@ class Base
     nil
   end
 
+  def get_transaction_currency(string)
+    stout = string.split(',').select { |elem| elem.include? 'Сумма' }
+    get_currency(stout.first)
+  end
+
   def to_hash(object)
     hash = {}
     object.instance_variables.each { |var| hash[var.to_s.delete('@')] = object.instance_variable_get(var) }

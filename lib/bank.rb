@@ -78,7 +78,7 @@ class Bank < Base
         date: transaction[3],
         description: transaction[2],
         amount: get_balance(transaction[4]).to_f,
-        currency: transaction[5][-1, 1],
+        currency: get_transaction_currency(transaction[2]),
         account_name: account_name
       )
       transactions[index] = to_hash(new_transaction)
