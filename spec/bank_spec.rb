@@ -12,8 +12,8 @@ RSpec.describe Bank do
     Bank.new
   end
 
-  context 'bank accounts' do
-    it 'check number of accounts and the result' do
+  context 'accounts' do
+    it 'count, result output check' do
       file = File.open('spec/samples/accounts.html', 'r')
       html = Nokogiri::HTML(file.read)
       accounts = bank_entity.parse_accounts(html)
@@ -40,7 +40,7 @@ RSpec.describe Bank do
   end
 
   context 'account transactions' do
-    it 'check count and parse transactions' do
+    it 'count, result output check' do
       file = File.open('spec/samples/transactions.html', 'r')
       html = Nokogiri::HTML(file.read)
       transactions = bank_entity.parse_transactions(html, '40817810200000055320')
