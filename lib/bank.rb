@@ -11,25 +11,18 @@ require_relative 'exception/html_empty_error'
 
 # Nokogiri implementation
 class Bank < Base
+
+  def connect
+    Watir::Browser.new
+  end
+
   def fetch_accounts
-    browser = Watir::Browser.new
+    browser = connect
     browser.goto 'https://demo.bank-on-line.ru'
     browser.div(class: 'button-demo').click
     browser.goto 'https://demo.bank-on-line.ru/#Contracts'
     html = Nokogiri::HTML.fragment(browser.table(id: 'contracts-list').html)
-    accounts = parse_accounts(html)
-    accounts.each do |account|
-      account_name = account[1].name
-      browser.goto "https://demo.bank-on-line.ru/#Contracts/#{account_name}/Transactions"
-      browser.text_field(id: 'DateFrom').click
-      browser.span(class: 'ui-icon-circle-triangle-w').click
-      browser.a(class: 'ui-state-default', text: Date.today.strftime('%d').sub!(/^0/, '')).click
-      browser.span(id: 'getTranz').click
-      html = Nokogiri::HTML.fragment(browser.table(class: 'cp-tran-with-balance').html)
-      accounts[account_name].transactions = parse_transactions(html, account)
-    end
-
-    accounts
+    parse_accounts(html)
   end
 
   def parse_accounts(html)
@@ -43,19 +36,35 @@ class Bank < Base
 
     raise AccountEmptyError, 'No accounts detected!' if text_all_rows == []
 
-    accounts = default_accounts
+    accounts = {}
+    count = 0
     text_all_rows.each do |account|
-      account_number = account[0]
-      accounts[account_number].name = account_number
-      accounts[account_number].currency = get_currency(account[1])
-      accounts[account_number].balance = get_balance(account[3]).to_f
-      accounts[account_number].nature = account[2]
+      new_account = Account.new(
+        name: account[0],
+        currency: get_currency(account[1]),
+        balance: get_balance(account[3]).to_f,
+        nature: account[2]
+      )
+      accounts[count] = to_hash(new_account)
+      count += 1
     end
 
     accounts
   end
 
-  def parse_transactions(html, account)
+  def fetch_transactions(account_name)
+    browser = connect
+    browser.goto "https://demo.bank-on-line.ru/#Contracts/#{account_name}/Transactions"
+    browser.div(class: 'button-demo').click
+    browser.text_field(id: 'DateFrom').click
+    browser.span(class: 'ui-icon-circle-triangle-w').click
+    browser.a(class: 'ui-state-default', text: Date.today.strftime('%d').sub!(/^0/, '')).click
+    browser.span(id: 'getTranz').click
+    html = Nokogiri::HTML.fragment(browser.table(class: 'cp-tran-with-balance').html)
+    parse_transactions(html, account_name)
+  end
+
+  def parse_transactions(html, account_name)
     raise HtmlEmptyError, 'Empty html!' if html == ''
 
     table_rows = html.css('tr.cp-transaction')
@@ -67,13 +76,16 @@ class Bank < Base
     raise TransactionEmptyError, 'No transactions detected!' if text_all_rows == []
 
     count = 0
-    transactions = default_transactions
+    transactions = {}
     text_all_rows.each do |transaction|
-      transactions[count].date = transaction[3]
-      transactions[count].description = transaction[2]
-      transactions[count].amount = get_balance(transaction[4]).to_f
-      transactions[count].currency = account[1].currency
-      transactions[count].account_name = account[1].name
+      new_transaction = Transaction.new(
+        date: transaction[3],
+        description: transaction[2],
+        amount: get_balance(transaction[4]).to_f,
+        currency: 'USD',
+        account_name: account_name
+      )
+      transactions[count] = to_hash(new_transaction)
       count += 1
     end
 
@@ -81,29 +93,11 @@ class Bank < Base
   end
 
   def accounts_into_file
-    accounts = {}
-    transactions = {}
-    output = {}
-    count = 0
     File.open('output.json', 'w') do |file|
       fetch_accounts.each do |account|
-        accounts['name'] = account[1].name
-        accounts['currency'] = account[1].currency
-        accounts['balance'] = account[1].balance
-        accounts['nature'] = account[1].nature
-        account[1].transactions.each do |transaction|
-          transactions['date'] = transaction[1].date
-          transactions['description'] = transaction[1].description
-          transactions['amount'] = transaction[1].amount
-          transactions['currency'] = transaction[1].currency
-          transactions['account_name'] = transaction[1].account_name
-        end
-        accounts['transactions'] = transactions
-        output[count] = accounts
-        count += 1
+        account[1]['transactions'] = fetch_transactions(account[1]['name'])
+        PP.pp(account, file)
       end
-
-      PP.pp({ 'accounts' => output }, file)
     end
   end
 end
