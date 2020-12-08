@@ -13,16 +13,21 @@ RSpec.describe Bank do
   end
 
   context 'bank accounts' do
-    it 'check count and parse accounts' do
+    it 'check number of accounts and the result' do
       file = File.open('spec/samples/accounts.html', 'r')
       html = Nokogiri::HTML(file.read)
       accounts = bank_entity.parse_accounts(html)
 
       expect(accounts.count).to eq(3)
-      expect(accounts.first[1]).to be_a Account
-      expect(accounts.first[1].name).to eq('40817810200000055320')
-      expect(accounts.first[1].currency).to eq('RUB')
-      expect(accounts.first[1].balance).to eq(1_000_000.0)
+      expect(accounts.first[1]).to eq(
+        {
+          "name"         => "40817810200000055320",
+          "currency"     => "RUB",
+          "balance"      => 1000000.0,
+          "nature"       => "Активный",
+          "transactions" => {}
+        }
+      )
     end
 
     #     it "raise error" do
@@ -36,20 +41,20 @@ RSpec.describe Bank do
 
   context 'account transactions' do
     it 'check count and parse transactions' do
-      account = Account.new
-      account.name = '40817810200000055320'
-      account.currency = 'RUB'
-      mock_account = { '40817810200000055320' => account }
       file = File.open('spec/samples/transactions.html', 'r')
       html = Nokogiri::HTML(file.read)
-      transactions = bank_entity.parse_transactions(html, mock_account.to_a[0])
+      transactions = bank_entity.parse_transactions(html, '40817810200000055320')
 
       expect(transactions.count).to eq(5)
-      expect(transactions.first[1]).to be_a Transaction
-      expect(transactions.first[1].account_name).to eq('40817810200000055320')
-      expect(transactions.first[1].date).to eq('01.12.2020')
-      expect(transactions.first[1].currency).to eq('RUB')
-      expect(transactions.first[1].amount).to eq(50.0)
+      expect(transactions.first[1]).to eq(
+        {
+          "date"         => "01.12.2020",
+          "amount"       => 50.0,
+          "currency"     => "₽",
+          "account_name" => "40817810200000055320",
+          "description"  => "Оплата услуг МегаФон Урал, Номер телефона: 79111111111, 01.12.2020 11:59:59, Сумма 50.00 RUB, Банк-он-ЛайнСтатусУспешно Тип операцииОплата услугСумма операции50.00 ₽Проведено50.00 ₽Комиссия0.00 ₽Дата обработки01.12.2020Информация о терминалеBank-on-line, Россия, Ekaterinburg, ul. Chapaeva 3aОписаниеОплата услуг МегаФон Урал, Номер телефона: 79111111111, 01.12.2020 11:59:59, Сумма 50.00 RUB, Банк-он-ЛайнНомер телефона9111111111",
+        }
+      )
     end
 
     #     it "raise error" do
