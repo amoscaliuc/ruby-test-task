@@ -23,7 +23,7 @@ RSpec.describe Bank do
         {
           'name'         => '40817810200000055320',
           'currency'     => 'RUB',
-          'balance'      => 1_000_000.0,
+          'balance'      => 1000000.0,
           'nature'       => 'Активный',
           'transactions' => {}
         }
