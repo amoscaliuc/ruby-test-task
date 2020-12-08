@@ -36,16 +36,14 @@ class Bank < Base
     raise AccountEmptyError, 'No accounts detected!' if text_all_rows == []
 
     accounts = {}
-    count = 0
-    text_all_rows.each do |account|
+    text_all_rows.each_with_index do |account, index|
       new_account = Account.new(
         name: account[0],
         currency: get_currency(account[1]),
         balance: get_balance(account[3]).to_f,
         nature: account[2]
       )
-      accounts[count] = to_hash(new_account)
-      count += 1
+      accounts[index] = to_hash(new_account)
     end
 
     accounts
@@ -74,9 +72,8 @@ class Bank < Base
 
     raise TransactionEmptyError, 'No transactions detected!' if text_all_rows == []
 
-    count = 0
     transactions = {}
-    text_all_rows.each do |transaction|
+    text_all_rows.each_with_index do |transaction, index|
       new_transaction = Transaction.new(
         date: transaction[3],
         description: transaction[2],
@@ -84,8 +81,7 @@ class Bank < Base
         currency: transaction[5][-1, 1],
         account_name: account_name
       )
-      transactions[count] = to_hash(new_transaction)
-      count += 1
+      transactions[index] = to_hash(new_transaction)
     end
 
     transactions
