@@ -35,13 +35,13 @@ class Bank < Base
 
     raise AccountEmptyError, 'No accounts detected!' if text_all_rows == []
 
-    accounts = []
+    accounts = Array.new
     text_all_rows.each_with_index do |account, index|
       new_account = Account.new(
         name: account[0],
         currency: get_currency(account[1]),
         balance: get_balance(account[3]).to_f,
-        nature: account[2]
+        nature: account[1]
       )
       accounts[index] = to_hash(new_account)
     end
@@ -55,7 +55,7 @@ class Bank < Base
     browser.div(class: 'button-demo').click
     browser.text_field(id: 'DateFrom').click
     browser.span(class: 'ui-icon-circle-triangle-w').click
-    browser.a(class: 'ui-state-default', text: Date.today.strftime('%d').sub!(/^0/, '')).click
+    browser.a(class: 'ui-state-default', text: Date.today.strftime('%d').to_i.to_s).click
     browser.span(id: 'getTranz').click
     html = Nokogiri::HTML.fragment(browser.table(class: 'cp-tran-with-balance').html)
     parse_transactions(html, account_name)
@@ -72,7 +72,7 @@ class Bank < Base
 
     raise TransactionEmptyError, 'No transactions detected!' if text_all_rows == []
 
-    transactions = []
+    transactions = Array.new
     text_all_rows.each_with_index do |transaction, index|
       new_transaction = Transaction.new(
         date: transaction[3],
